@@ -9,9 +9,9 @@ namespace Yinyue200.OperationDeferral
     /// <summary>
     /// 表示延迟操作
     /// </summary>
-    public class OperationDeferral
+    public class OperationDeferral : IDisposable
     {
-        System.Threading.AutoResetEvent are = new System.Threading.AutoResetEvent(false);
+        System.Threading.ManualResetEvent are = new System.Threading.ManualResetEvent(false);
         public void Complete()
         {
             CompleteWithoutDispose();
@@ -40,6 +40,11 @@ namespace Yinyue200.OperationDeferral
         {
             are.WaitOne();
         }
+
+        public void Dispose()
+        {
+            are.Dispose();
+        }
     }
     public class ValuePackage<T>
     {
@@ -50,7 +55,7 @@ namespace Yinyue200.OperationDeferral
     /// </summary>
     public class OperationDeferral<TResult> : IDisposable
     {
-        System.Threading.AutoResetEvent are = new System.Threading.AutoResetEvent(false);
+        System.Threading.ManualResetEvent are = new System.Threading.ManualResetEvent(false);
         TResult Result;
         public void Complete(TResult result)
         {
