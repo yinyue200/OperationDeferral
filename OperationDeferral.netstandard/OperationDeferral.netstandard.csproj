@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>OperationDeferral</RootNamespace>
+    <AssemblyName>OperationDeferral</AssemblyName>
   </PropertyGroup>
 
 </Project>
