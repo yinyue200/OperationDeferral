@@ -6,4 +6,8 @@
     <AssemblyName>OperationDeferral</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="15.4.4" />
+  </ItemGroup>
+
 </Project>

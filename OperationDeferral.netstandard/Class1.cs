@@ -11,11 +11,10 @@ namespace Yinyue200.OperationDeferral
     /// </summary>
     public class OperationDeferral : IDisposable
     {
-        System.Threading.ManualResetEvent are = new System.Threading.ManualResetEvent(false);
+        Microsoft.VisualStudio.Threading.AsyncManualResetEvent are = new Microsoft.VisualStudio.Threading.AsyncManualResetEvent(false);
         public void Complete()
         {
             CompleteWithoutDispose();
-            are.Dispose();
         }
         public void CompleteWithoutDispose()
         {
@@ -27,23 +26,16 @@ namespace Yinyue200.OperationDeferral
         }
         public Task WaitOneAsync()
         {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    are.WaitOne();
-                }
-                catch { }
-            });
+            return are.WaitAsync();
         }
         public void WaitOne()
         {
-            are.WaitOne();
+            are.WaitAsync().Wait();
         }
 
         public void Dispose()
         {
-            are.Dispose();
+
         }
     }
     /// <summary>
@@ -51,7 +43,7 @@ namespace Yinyue200.OperationDeferral
     /// </summary>
     public class OperationDeferral<TResult> : IDisposable
     {
-        System.Threading.ManualResetEvent are = new System.Threading.ManualResetEvent(false);
+        Microsoft.VisualStudio.Threading.AsyncManualResetEvent are = new Microsoft.VisualStudio.Threading.AsyncManualResetEvent(false);
         TResult Result;
         public void Complete(TResult result)
         {
@@ -65,25 +57,17 @@ namespace Yinyue200.OperationDeferral
         }
         public async Task<TResult> WaitOneAsync()
         {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    are.WaitOne();
-                }
-                catch { }
-            });
+            await are.WaitAsync();
             return Result;
         }
         public TResult WaitOne()
         {
-            are.WaitOne();
-            return Result;
+            return WaitOneAsync().Result;
         }
 
         public void Dispose()
         {
-            are.Dispose();
+
         }
     }
 }
